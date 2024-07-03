@@ -8,14 +8,6 @@ import pickle
 from layers import L1Dist
 
 
-with open('model_architecture.json','r') as json_file:
-    loaded_model_json=json_file.read()
-    model=model_from_json(loaded_model_json,custom_objects={'L1Dist':L1Dist})
-
-model.load_weights('model_weights.h5')
-
-
-model_path = '/home/evans_sam/temp/siamese_model.keras'
 
 # Load the model architecture
 #mode=tf.keras.models.load_model(model_path,custom_objects={'L1Dist':L1Dist})
@@ -72,24 +64,35 @@ def verify(detection_threshold,verification_threshold,input_image):
         return person_name
 
 
+def main():
 
-
-
-
-
-for files in os.listdir('Image_Files'):
-
-    input_img=preprocess(os.path.join('Image_Files',files))
-
-    detection_threshold=0.5
-
-    verification_threshold=0.8
+    with open('model_architecture.json','r') as json_file:
+        loaded_model_json=json_file.read()
+        model=model_from_json(loaded_model_json,custom_objects={'L1Dist':L1Dist})
+    
+    model.load_weights('model_weights.h5')
+    
+    
+    model_path = '/home/evans_sam/temp/siamese_model.keras'
+    
+    
+    
+    for files in os.listdir('Image_Files'):
+    
+        input_img=preprocess(os.path.join('Image_Files',files))
+    
+        detection_threshold=0.5
+    
+        verification_threshold=0.8
+        
+    
+        person_name=verify(detection_threshold,verification_threshold,input_img)
+    
+        print(person_name)
     
 
-    person_name=verify(detection_threshold,verification_threshold,input_img)
-
-    print(person_name)
-
+if __name__=="__main__":
+    main()
 
 
 
